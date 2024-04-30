@@ -83,11 +83,10 @@ def get_video_details(youtube,video_ids):
 
             for item in response['items']:
                 duration_str = item['contentDetails']['duration']
-                # Extract minutes and seconds from the duration string
                 minutes_str, seconds_str = duration_str.split('M')
                 minutes = int(minutes_str[2:]) if 'M' in duration_str else 0
                 seconds = int(seconds_str[:-1]) if 'S' in duration_str else 0
-                # Calculate total duration in minutes
+               
                 total_minutes = minutes + (seconds / 60)
 
                 data = {'channel_name':item['snippet']['channelTitle'],
@@ -153,14 +152,10 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey,DateTi
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 
-# Define the SQLAlchemy engine to connect to MySQL database
-# Replace 'username', 'password', and 'database_name' with your MySQL credentials and database name
 engine = create_engine('mysql+pymysql://root:@localhost:3306/youtube')
 
-# Define the base class for declarative class definitions
 Base = declarative_base()
 
-# Define the Channel model
 class Channel(Base):
     __tablename__ ='channels'
 
@@ -172,7 +167,6 @@ class Channel(Base):
     playlist_id = Column(String(50))
     videos = relationship('Video', back_populates='channel')
 
-# Define the Video model
 class Video(Base):
     __tablename__ ='videos'
 
@@ -182,10 +176,8 @@ class Video(Base):
     channel_name=Column(String(50))
     title = Column(String(100))
     description = Column(String(500))
-    #tags =Column(String(1000))
     published_at = Column(DateTime)
     duration = Column(Integer)
-    #thumbnail = Column(String(1000))
     view_count =Column(Integer)
     like_count =Column(Integer)
     comment_count =Column(Integer)
@@ -204,10 +196,8 @@ class Comment(Base):
    comment_author = Column(String(50))
    comment_published = Column(DateTime)
    video = relationship('Video', back_populates='comments')
-# Create tables in the database
 Base.metadata.create_all(engine)
 
-# Define function to insert data into database
 def insert_data_into_db(data):
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -226,14 +216,11 @@ def insert_data_into_db(data):
                     video_id=video_info['video_id'],
                     channel_name= video_info['channel_name'],
                     title= video_info['video_name'],
-                    #tags=video_info['tags'],
                     published_at=video_info['published_at'],
                     duration = video_info['duration'],
-                    #thumbnail=thumbnail_url,
                     view_count=video_info['view_count'],
                     like_count=video_info['like_count'],
                     comment_count=video_info['comment_count'],
-                    #favorite_count=video_info['favorite_count'],
                     caption_status=video_info['caption_status'],
                     channel_id=channel.channelid)
             
