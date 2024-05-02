@@ -1,4 +1,4 @@
-# Youtube-data-harvesting-using-SQL-and-streamlit
+# Youtube-data-harvesting-using-python-SQL-and-streamlit
 
 Project Overview:
 The YouTube Data Harvesting and Warehousing project is designed to extract specific data from YouTube using the Google API. The extracted data is stored in a SQL database and made accessible for analysis and exploration within a Streamlit app.
